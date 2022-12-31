@@ -9,6 +9,7 @@ import (
 type Config struct {
 	Environment   string `mapstructure:"ENVIRONMENT"`
 	ServerAddress string `mapstructure:"SERVER_ADDRESS"`
+	GRPCAddress   string `mapstructure:"GRPC_ADDRESS"`
 	DBDriver      string `mapstructure:"DB_DRIVER"`
 	DBSource      string `mapstructure:"DB_SOURCE"`
 	MigrationURL  string `mapstructure:"MIGRATION_URL"`

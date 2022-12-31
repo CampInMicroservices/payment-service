@@ -2,13 +2,18 @@ package main
 
 import (
 	"log"
+	"net"
+
 	"payment-service/api"
 	"payment-service/config"
 	"payment-service/db"
+	"payment-service/gapi"
+	"payment-service/proto"
 
 	"github.com/golang-migrate/migrate/v4"
 	_ "github.com/golang-migrate/migrate/v4/database/postgres"
 	_ "github.com/golang-migrate/migrate/v4/source/file"
+	"google.golang.org/grpc"
 )
 
 func main() {
@@ -33,6 +38,22 @@ func main() {
 	if err != nil {
 		log.Fatal("Failed to create a server: ", err)
 	}
+
+	// GRPC server (concurrently)
+	go func() {
+		lis, err := net.Listen("tcp", config.GRPCAddress)
+		if err != nil {
+			log.Fatalf("Failed to listen: %v", err)
+		}
+
+		s := gapi.NewGrpcServer(config, store)
+		grpcServer := grpc.NewServer()
+
+		proto.RegisterPaymentServiceServer(grpcServer, &s)
+		if err := grpcServer.Serve(lis); err != nil {
+			log.Fatalf("gRPC server failed: %v", err)
+		}
+	}()
 
 	// Start a server
 	if err := server.Start(config.ServerAddress); err != nil {
