@@ -1,6 +1,37 @@
 # Payment service
 
-## gRPC
+## Endpoints
+
+```
+GET  localhost:8080/v1/payments/:id
+GET  localhost:8080/v1/payments?offset=0&limit=10
+POST localhost:8080/v1/payments
+```
+
+Payment JSON:
+```
+{
+  "booking_id": 1,
+  "price": 250.1,
+  "paid": false
+}
+```
+
+## gRPC API
+
+Payment PROTO:
+
+```
+{
+    "payment": {
+        "booking_id": 1,
+        "paid": true,
+        "price": 512.5
+    }
+}
+```
+
+### Modifying Payment Proto
 
 If `proto/payment.proto` is modified, run:
 
