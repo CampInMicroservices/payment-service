@@ -28,11 +28,11 @@ metadata:
 spec:
   type: ClusterIP
   ports:
-    - name: REST
+    - name: rest
       protocol: TCP
       port: 80
       targetPort: 8080
-    - name: gRPC
+    - name: grpc
       protocol: TCP
       port: 90
       targetPort: 9000
