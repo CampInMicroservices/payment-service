@@ -20,6 +20,7 @@ spec:
           ports:
             - containerPort: 8080
             - containerPort: 9000
+          imagePullPolicy: Always
 ---
 apiVersion: v1
 kind: Service
