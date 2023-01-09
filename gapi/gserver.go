@@ -2,6 +2,7 @@ package gapi
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"payment-service/config"
 	"payment-service/db"
@@ -40,6 +41,8 @@ func (s *ServerGRPC) CreatePaymentRequest(ctx context.Context, in *proto.Payment
 		return nil, err
 	}
 
+	clientSecret, _ := s.InitialisePaymentIntent(2000, fmt.Sprint(arg.BookingID))
+
 	// Create response object
 	response := &proto.PaymentResponse{
 		Id: result.ID,
@@ -48,6 +51,7 @@ func (s *ServerGRPC) CreatePaymentRequest(ctx context.Context, in *proto.Payment
 			Price:     float32(result.Price),
 			Paid:      result.Paid,
 		},
+		ClientSecret: clientSecret,
 	}
 
 	return response, nil

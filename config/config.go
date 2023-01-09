@@ -14,6 +14,7 @@ type Config struct {
 	DBSource      string `mapstructure:"DB_SOURCE"`
 	MigrationURL  string `mapstructure:"MIGRATION_URL"`
 	GinMode       string `mapstructure:"GIN_MODE"`
+	StripeKey     string `mapstructure:"STRIPE_KEY"`
 }
 
 // LoadConfig reads configuration from file or environment variables.

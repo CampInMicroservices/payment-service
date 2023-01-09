@@ -1,5 +1,10 @@
 # Payment service
 
+Change config values in app.env to your configuration.
+```
+STRIPE_KEY=***
+```
+
 ## Endpoints
 
 ```
