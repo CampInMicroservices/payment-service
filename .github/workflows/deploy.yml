@@ -21,7 +21,8 @@ jobs:
                 DB_DRIVER=postgres
                 DB_SOURCE=${{ secrets.PROD_DB_CONNECTION }}
                 MIGRATION_URL=file://db/migration
-                GIN_MODE=debug' > app.env
+                GIN_MODE=debug
+                STRIPE_KEY=${{ secrets.STRIPE_KEY }}' > app.env
           cat app.env
 
       # Publish image to Docker Hub.
