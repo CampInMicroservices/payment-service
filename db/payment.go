@@ -20,9 +20,7 @@ type CreatePaymentParam struct {
 }
 
 type UpdatePaymentParam struct {
-	BookingID int64
-	Price     float64
-	Paid      bool
+	Paid bool
 }
 
 type ListPaymentParam struct {
@@ -55,6 +53,28 @@ func (store *Store) CreatePayment(ctx context.Context, arg CreatePaymentParam) (
 	RETURNING "id", "booking_id", "price", "paid", "created_at"
 	`
 	row := store.db.QueryRowContext(ctx, query, arg.BookingID, arg.Price, arg.Paid)
+
+	var payment Payment
+	err := row.Scan(
+		&payment.ID,
+		&payment.BookingID,
+		&payment.Price,
+		&payment.Paid,
+		&payment.CreatedAt,
+	)
+
+	return payment, err
+}
+
+func (store *Store) UpdatePayment(ctx context.Context, arg UpdatePaymentParam, id int64) (Payment, error) {
+
+	const query = `
+	UPDATE "payments"
+	SET "paid" = $1
+	WHERE "id" = $2
+	RETURNING "id", "booking_id", "price", "paid", "created_at"
+	`
+	row := store.db.QueryRowContext(ctx, query, arg.Paid, id)
 
 	var payment Payment
 	err := row.Scan(

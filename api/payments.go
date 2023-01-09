@@ -22,6 +22,10 @@ type createPaymentRequest struct {
 	Paid      *bool   `json:"paid" binding:"required"`
 }
 
+type updatePaymentRequest struct {
+	Paid *bool `json:"paid" binding:"required"`
+}
+
 func (server *Server) GetPaymentByID(ctx *gin.Context) {
 
 	// Check if request has ID field in URI.
@@ -94,4 +98,37 @@ func (server *Server) CreatePayment(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusCreated, result)
+}
+
+func (server *Server) UpdatePayment(ctx *gin.Context) {
+
+	// Check if request has ID field in URI.
+	var uri getPaymentRequest
+	if err := ctx.ShouldBindUri(&uri); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"message": err})
+		ctx.Abort()
+		return
+	}
+
+	// Check if request has all required fields in json body.
+	var req updatePaymentRequest
+	if err := ctx.ShouldBindJSON(&req); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"message": err})
+		ctx.Abort()
+		return
+	}
+
+	arg := db.UpdatePaymentParam{
+		Paid: *req.Paid,
+	}
+
+	// Execute query.
+	result, err := server.store.UpdatePayment(ctx, arg, uri.ID)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"message": err})
+		ctx.Abort()
+		return
+	}
+
+	ctx.JSON(http.StatusOK, result)
 }

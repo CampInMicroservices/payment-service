@@ -31,6 +31,7 @@ func NewServer(config config.Config, store *db.Store) (*Server, error) {
 		v1.GET("/payments/:id", server.GetPaymentByID)
 		v1.GET("/payments", server.GetAllPayments)
 		v1.POST("/payments", server.CreatePayment)
+		v1.PUT("/payments/:id", server.UpdatePayment)
 	}
 
 	// Setup health check routes
